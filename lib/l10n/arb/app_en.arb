@@ -1,0 +1,23 @@
+{
+  "@@locale": "en",
+  "coffeePageTitle": "Coffee List",
+  "@coffeePageTitle": {
+    "description": "Title for the coffee list page."
+  },
+  "coffeeLoadError": "Error loading coffees",
+  "@coffeeLoadError": {
+    "description": "This message is displayed when there is an error loading coffee data."
+  },
+  "coffeesEmpty": "No coffees available",
+  "@coffeesEmpty": {
+    "description": "Message displayed when there are no coffees to show."
+  },
+  "coffeeReload": "Reload",
+  "@coffeeReload": {
+    "description": "Button text to reload the coffee list."
+  },
+  "favouriteCoffeesTitle": "Favourite Coffees",
+  "@favouriteCoffeesTitle": {
+    "description": "Title for the favourite coffees section."
+  }
+}

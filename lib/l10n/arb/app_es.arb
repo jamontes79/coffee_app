@@ -1,0 +1,23 @@
+{
+  "@@locale": "es",
+  "coffeePageTitle": "Lista de cafés",
+  "@coffeePageTitle": {
+    "description": "Título de la página de lista de cafés"
+  },
+  "coffeeLoadError": "Se ha producido un error al cargar los cafés",
+  "@coffeeLoadError": {
+    "description": "This message is displayed when there is an error loading coffee data."
+  },
+  "coffeesEmpty": "No hay cafés disponibles",
+  "@coffeesEmpty": {
+    "description": "Mensaje mostrado cuando no hay cafés para mostrar."
+  },
+  "coffeeReload": "Recargar",
+  "@coffeeReload": {
+    "description": "Texto del botón para recargar la lista de cafés."
+  },
+  "favouriteCoffeesTitle": "Cafés favoritos",
+  "@favouriteCoffeesTitle": {
+    "description": "Título de la sección de cafés favoritos."
+  }
+}

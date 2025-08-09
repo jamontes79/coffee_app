@@ -1,0 +1,10 @@
+import 'package:mocktail/mocktail.dart';
+
+extension WhenExtension<T> on When<T> {
+  void thenAnswerMany(List<Answer<T>> cbs) {
+    return thenAnswer((invocation) {
+      if (cbs.isEmpty) throw Exception('No more answers available');
+      return cbs.removeAt(0)(invocation);
+    });
+  }
+}

@@ -1,0 +1,86 @@
+build_runner: fvm dart run build_runner build --delete-conflicting-outputs
+
+build_runner_watch: fvm dart run build_runner watch --delete-conflicting-outputs
+
+pre_push:
+  - fvm flutter pub get
+  - $build_runner
+  - fvm dart format .
+  - fvm flutter analyze
+  - $test_wo_coverage
+
+clean:
+  - fvm install
+  - fvm flutter clean
+  - fvm flutter pub get
+
+deep_clean_ios:
+  - rm -rf ios/Pods/*
+  - rm -f ios/Podfile.lock
+  - rm -r ios/.symlinks
+  - rm -r ios/Flutter/Flutter.framework
+  - rm -f ios/Flutter/Flutter.podspec
+  - $clean
+  - cd ios && pod cache clean --all
+  - cd ios && pod repo update
+  - fvm flutter pub get
+  - cd ios && pod install
+
+clean_cache:
+  - fvm flutter clean
+  - fvm flutter pub cache repair
+  - fvm flutter pub get
+
+build_android_dev:
+  - $clean
+  - fvm flutter build appbundle --flavor production -t lib/main_development.dart --no-tree-shake-icons
+
+build_android_stg:
+  - $clean
+  - fvm flutter build appbundle --flavor staging -t lib/main_staging.dart --no-tree-shake-icons --dart-define=user=admin
+
+build_android_prod:
+  - $clean
+  - fvm flutter build appbundle --flavor production -t lib/main_production.dart --no-tree-shake-icons
+
+test_wo_coverage:
+  - $uncovered_files
+  - rm test/failures/*.png
+  - very_good test -j 4  --optimization --test-randomize-ordering-seed random
+  - rm test/coverage_helper_test.dart
+test:
+  - $uncovered_files
+  - rm test/failures/*.png
+  - very_good test -j 4  --optimization --coverage --test-randomize-ordering-seed random  --dart-define=CI=false
+  - $refresh_coverage
+  - rm test/coverage_helper_test.dart
+
+uncovered_files:
+  - sh ./uncovered_files.sh coffee_app
+
+refresh_coverage:
+  - fvm dart run remove_from_coverage -f coverage/lcov.info -r '^lib/[^/]+\.dart$|^lib/l10n/|^lib/l10n/arb/|^lib/injection/|^lib/injection/modules/|\.g\.dart$'
+  - genhtml coverage/lcov.info -o coverage/
+
+update_golden:
+  - fvm flutter test --update-goldens --dart-define=forceAllPlatforms=true --tags=golden
+  - $test
+
+update_golden_wo_tests:
+  - fvm flutter test --update-goldens --dart-define=forceAllPlatforms=true --tags=golden
+
+
+open_ios: open ios/Runner.xcworkspace
+
+remove_pod_cache:
+  - cd ios
+  - rm Podfile.lock
+  - rm -rf "${HOME}/Library/Caches/CocoaPods"
+  - rm -rf "`pwd`/Pods/"
+
+
+build_translations:
+  - fvm flutter pub get
+  - fvm flutter gen-l10n
+  - jq . lib/l10n/arb/app_es.arb > lib/l10n/arb/app_es_tmp.arb && mv lib/l10n/arb/app_es_tmp.arb lib/l10n/arb/app_es.arb
+  - jq . lib/l10n/arb/app_en.arb > lib/l10n/arb/app_en_tmp.arb && mv lib/l10n/arb/app_en_tmp.arb lib/l10n/arb/app_en.arb
