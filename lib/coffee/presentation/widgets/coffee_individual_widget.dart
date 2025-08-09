@@ -1,8 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:coffee_app/coffee/application/favourite/favourite_coffee_bloc.dart'
     as fav_coffee_bloc;
 import 'package:coffee_app/coffee/application/single/coffee_bloc.dart';
 import 'package:coffee_app/coffee/domain/model/coffee.dart';
+import 'package:coffee_app/coffee/presentation/widgets/coffee_card.dart';
 import 'package:coffee_app/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -43,44 +43,7 @@ class CoffeeIndividualWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-
-                        children: [
-                          IconButton(
-                            icon: Icon(
-                              isFavourite
-                                  ? Icons.favorite
-                                  : Icons.favorite_border,
-                            ),
-                            iconSize: 32,
-                            onPressed: () {
-                              context
-                                  .read<fav_coffee_bloc.FavouriteCoffeeBloc>()
-                                  .add(
-                                    fav_coffee_bloc.ToggleFavouriteCoffeeEvent(
-                                      coffee,
-                                    ),
-                                  );
-                            },
-                          ),
-                          const SizedBox(height: 16),
-                          CachedNetworkImage(
-                            imageUrl: coffee.url,
-                            width: 300,
-                            height: 400,
-                            fit: BoxFit.contain,
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.error),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                  CoffeeCard(isFavourite: isFavourite, coffee: coffee),
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () {
