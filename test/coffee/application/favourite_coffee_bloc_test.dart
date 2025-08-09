@@ -103,7 +103,7 @@ void main() {
         ),
         act: (FavouriteCoffeeBloc bloc) => bloc.add(
           const ToggleFavouriteCoffeeEvent(
-            const Coffee(url: 'https://example.com/coffee1.jpg'),
+            Coffee(url: 'https://example.com/coffee1.jpg'),
           ),
         ),
         expect: () => [
@@ -145,7 +145,7 @@ void main() {
         ),
         act: (FavouriteCoffeeBloc bloc) => bloc.add(
           const ToggleFavouriteCoffeeEvent(
-            const Coffee(url: 'https://example.com/coffee1.jpg'),
+            Coffee(url: 'https://example.com/coffee1.jpg'),
           ),
         ),
         expect: () => [
