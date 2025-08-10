@@ -19,6 +19,7 @@ jobs:
     with:
       flutter_channel: stable
       flutter_version: 3.32.8
+      min_coverage: 98
       coverage_excludes: '**/injection/** **/routes/*.dart'
 
   spell-check:
