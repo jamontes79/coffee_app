@@ -5,12 +5,15 @@ import 'package:coffee_app/coffee/presentation/coffee_page.dart';
 import 'package:coffee_app/coffee/presentation/widgets/coffee_error_widget.dart';
 import 'package:coffee_app/coffee/presentation/widgets/coffee_individual_widget.dart';
 import 'package:coffee_app/routes/routes.dart';
+import 'package:coffee_app/theme/application/theme_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 
 import '../../_mock/application/mocked_coffee_bloc.dart';
 import '../../_mock/application/mocked_favourite_coffee_bloc.dart';
+import '../../_mock/application/mocked_theme_bloc.dart';
 import '../../helpers/helpers.dart';
 import '../../helpers/mock_go_router_provider.dart';
 
@@ -18,6 +21,7 @@ void main() {
   late MockGoRouter mockGoRouter;
   late MockedCoffeeBloc mockedCoffeeBloc;
   late MockedFavouriteCoffeeBloc mockedFavouriteCoffeeBloc;
+  late MockedThemeBloc mockedThemeBloc;
 
   setUp(() {
     mockGoRouter = MockGoRouter();
@@ -29,6 +33,7 @@ void main() {
           favouriteCoffees: [],
         ),
       );
+    mockedThemeBloc = MockedThemeBloc()..mockState(const ThemeLight());
   });
 
   group(CoffeePage, () {
@@ -46,16 +51,21 @@ void main() {
             ),
           );
           await tester.pumpApp(
-            _TesterWidget(mockedCoffeeBloc, mockedFavouriteCoffeeBloc),
+            _TesterWidget(
+              mockedCoffeeBloc,
+              mockedFavouriteCoffeeBloc,
+              mockedThemeBloc,
+            ),
           );
 
           await tester.pumpAndSettle();
 
           await tester.tap(find.byType(PopupMenuButton<String>));
           await tester.pumpAndSettle();
-          expect(find.byType(PopupMenuItem<String>), findsOneWidget);
+          expect(find.byType(PopupMenuItem<String>), findsNWidgets(2));
 
           expect(find.text('Favourite Coffees'), findsOneWidget);
+          expect(find.text('Switch Theme Mode'), findsOneWidget);
         },
       );
 
@@ -74,7 +84,11 @@ void main() {
           await tester.pumpApp(
             MockGoRouterProvider(
               goRouter: mockGoRouter,
-              child: _TesterWidget(mockedCoffeeBloc, mockedFavouriteCoffeeBloc),
+              child: _TesterWidget(
+                mockedCoffeeBloc,
+                mockedFavouriteCoffeeBloc,
+                mockedThemeBloc,
+              ),
             ),
           );
 
@@ -87,6 +101,43 @@ void main() {
           await tester.pumpAndSettle();
 
           mockGoRouter.mockGo(CoffeeRoutes.favouritesPage);
+        },
+      );
+
+      testWidgets(
+        'should call ToggleThemeEvent when "Switch Theme Mode" selected',
+        (tester) async {
+          mockedCoffeeBloc.mockState(
+            const CoffeeState(
+              status: CoffeeStatus.loaded,
+              coffee: Coffee(
+                url: 'https://example.com/coffee.jpg',
+              ),
+              favouriteCoffees: [],
+            ),
+          );
+          await tester.pumpApp(
+            MockGoRouterProvider(
+              goRouter: mockGoRouter,
+              child: _TesterWidget(
+                mockedCoffeeBloc,
+                mockedFavouriteCoffeeBloc,
+                mockedThemeBloc,
+              ),
+            ),
+          );
+
+          await tester.pumpAndSettle();
+
+          await tester.tap(find.byType(PopupMenuButton<String>));
+          await tester.pumpAndSettle();
+
+          await tester.tap(find.text('Switch Theme Mode'));
+          await tester.pumpAndSettle();
+
+          verify(
+            () => mockedThemeBloc.add(const ToggleThemeEvent()),
+          ).called(1);
         },
       );
     });
@@ -102,7 +153,11 @@ void main() {
             ),
           );
           await tester.pumpApp(
-            _TesterWidget(mockedCoffeeBloc, mockedFavouriteCoffeeBloc),
+            _TesterWidget(
+              mockedCoffeeBloc,
+              mockedFavouriteCoffeeBloc,
+              mockedThemeBloc,
+            ),
           );
 
           final placeholderFinder = find.byType(CircularProgressIndicator);
@@ -122,7 +177,11 @@ void main() {
             ),
           );
           await tester.pumpApp(
-            _TesterWidget(mockedCoffeeBloc, mockedFavouriteCoffeeBloc),
+            _TesterWidget(
+              mockedCoffeeBloc,
+              mockedFavouriteCoffeeBloc,
+              mockedThemeBloc,
+            ),
           );
 
           expect(find.byType(CircularProgressIndicator), findsOneWidget);
@@ -144,7 +203,11 @@ void main() {
             ),
           );
           await tester.pumpApp(
-            _TesterWidget(mockedCoffeeBloc, mockedFavouriteCoffeeBloc),
+            _TesterWidget(
+              mockedCoffeeBloc,
+              mockedFavouriteCoffeeBloc,
+              mockedThemeBloc,
+            ),
           );
 
           expect(find.byType(CoffeeErrorWidget), findsOneWidget);
@@ -168,7 +231,11 @@ void main() {
             ),
           );
           await tester.pumpApp(
-            _TesterWidget(mockedCoffeeBloc, mockedFavouriteCoffeeBloc),
+            _TesterWidget(
+              mockedCoffeeBloc,
+              mockedFavouriteCoffeeBloc,
+              mockedThemeBloc,
+            ),
           );
 
           expect(find.byType(CoffeeErrorWidget), findsNothing);
@@ -184,17 +251,20 @@ class _TesterWidget extends StatelessWidget {
   const _TesterWidget(
     this.coffeeBloc,
     this.favouriteCoffeeBloc,
+    this.themeBloc,
   );
   final CoffeeBloc coffeeBloc;
   final FavouriteCoffeeBloc favouriteCoffeeBloc;
+  final ThemeBloc themeBloc;
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<FavouriteCoffeeBloc>.value(
-      value: favouriteCoffeeBloc,
-      child: BlocProvider<CoffeeBloc>.value(
-        value: coffeeBloc,
-        child: const CoffeePage(),
-      ),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<FavouriteCoffeeBloc>.value(value: favouriteCoffeeBloc),
+        BlocProvider<CoffeeBloc>.value(value: coffeeBloc),
+        BlocProvider<ThemeBloc>.value(value: themeBloc),
+      ],
+      child: const CoffeePage(),
     );
   }
 }

@@ -3,14 +3,21 @@ import 'package:coffee_app/coffee/application/favourite/favourite_coffee_bloc.da
 import 'package:coffee_app/coffee/application/single/coffee_bloc.dart';
 import 'package:coffee_app/coffee/presentation/coffee_page.dart';
 import 'package:coffee_app/injection/injection.dart';
+import 'package:coffee_app/theme/application/theme_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 import '../../_mock/application/mocked_coffee_bloc.dart';
 import '../../_mock/application/mocked_favourite_coffee_bloc.dart';
+import '../../_mock/application/mocked_theme_bloc.dart';
+import '../../_mock/third_party/mocked_storage.dart';
 
 void main() {
   late MockedCoffeeBloc mockedCoffeeBloc;
   late MockedFavouriteCoffeeBloc mockedFavouriteCoffeeBloc;
+  late MockedThemeBloc mockedThemeBloc;
+  late MockedStorage mockedStorage;
+
   setUp(() {
     mockedCoffeeBloc = MockedCoffeeBloc()..mockState(CoffeeState.initial());
     mockedFavouriteCoffeeBloc = MockedFavouriteCoffeeBloc()
@@ -20,10 +27,14 @@ void main() {
           favouriteCoffees: [],
         ),
       );
+    mockedStorage = MockedStorage()..mockWrite();
+    mockedThemeBloc = MockedThemeBloc()..mockState(const ThemeLight());
+    HydratedBloc.storage = mockedStorage;
 
     getIt
       ..registerSingleton<CoffeeBloc>(mockedCoffeeBloc)
-      ..registerSingleton<FavouriteCoffeeBloc>(mockedFavouriteCoffeeBloc);
+      ..registerSingleton<FavouriteCoffeeBloc>(mockedFavouriteCoffeeBloc)
+      ..registerSingleton<ThemeBloc>(mockedThemeBloc);
   });
 
   tearDown(getIt.reset);
