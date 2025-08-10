@@ -3,11 +3,13 @@ import 'package:coffee_app/coffee/presentation/widgets/coffee_error_widget.dart'
 import 'package:coffee_app/coffee/presentation/widgets/coffee_individual_widget.dart';
 import 'package:coffee_app/l10n/l10n.dart';
 import 'package:coffee_app/routes/routes.dart';
+import 'package:coffee_app/theme/application/theme_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 const String favouriteCoffees = 'favouriteCoffees';
+const String themeMode = 'themeMode';
 
 class CoffeePage extends StatelessWidget {
   const CoffeePage({super.key});
@@ -25,6 +27,8 @@ class CoffeePage extends StatelessWidget {
                 onSelected: (value) {
                   if (value == favouriteCoffees) {
                     context.go(CoffeeRoutes.favouritesPage);
+                  } else if (value == themeMode) {
+                    context.read<ThemeBloc>().add(const ToggleThemeEvent());
                   }
                 },
                 itemBuilder: (context) {
@@ -32,6 +36,10 @@ class CoffeePage extends StatelessWidget {
                     PopupMenuItem<String>(
                       value: favouriteCoffees,
                       child: Text(l10n.favouriteCoffeesTitle),
+                    ),
+                    PopupMenuItem<String>(
+                      value: themeMode,
+                      child: Text(l10n.themeModeTitle),
                     ),
                   ];
                 },

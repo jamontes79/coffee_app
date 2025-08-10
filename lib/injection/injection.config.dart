@@ -34,6 +34,7 @@ import 'package:coffee_app/injection/modules/http_module_injection.dart'
     as _i33;
 import 'package:coffee_app/injection/modules/shared_preferences_injection.dart'
     as _i625;
+import 'package:coffee_app/theme/application/theme_bloc.dart' as _i151;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:get_storage/get_storage.dart' as _i792;
 import 'package:http/http.dart' as _i519;
@@ -49,6 +50,7 @@ extension GetItInjectableX on _i174.GetIt {
     final httpModuleInjection = _$HttpModuleInjection();
     final getStorageInjection = _$GetStorageInjection();
     gh.factory<_i519.Client>(() => httpModuleInjection.client);
+    gh.factory<_i151.ThemeBloc>(() => _i151.ThemeBloc());
     gh.lazySingleton<_i792.GetStorage>(() => getStorageInjection.storage);
     gh.lazySingleton<_i920.CoffeeRepository>(
       () => _i920.CoffeeRepository(gh<_i519.Client>(), gh<_i792.GetStorage>()),
@@ -56,11 +58,11 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i608.RemoveFavouriteCoffeeUseCase>(
       () => _i175.RemoveFavouriteCoffee(gh<_i920.CoffeeRepository>()),
     );
-    gh.lazySingleton<_i474.LoadCoffeeUseCase>(
-      () => _i498.LoadCoffee(gh<_i920.CoffeeRepository>()),
-    );
     gh.lazySingleton<_i521.LoadFavoriteCoffeesUseCase>(
       () => _i219.LoadFavouriteCoffees(gh<_i920.CoffeeRepository>()),
+    );
+    gh.lazySingleton<_i474.LoadCoffeeUseCase>(
+      () => _i498.LoadCoffee(gh<_i920.CoffeeRepository>()),
     );
     gh.lazySingleton<_i998.AddFavouriteCoffeeUseCase>(
       () => _i331.AddFavouriteCoffee(gh<_i920.CoffeeRepository>()),

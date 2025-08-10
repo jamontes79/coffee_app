@@ -19,5 +19,9 @@
   "favouriteCoffeesTitle": "Cafés favoritos",
   "@favouriteCoffeesTitle": {
     "description": "Título de la sección de cafés favoritos."
+  },
+  "themeModeTitle": "Cambiar modo de tema",
+  "@themeModeTitle": {
+    "description": "Título del conmutador de modo de tema."
   }
 }
