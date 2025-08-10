@@ -4,8 +4,8 @@ import 'package:coffee_app/coffee/domain/model/coffee.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class CoffeeCard extends StatelessWidget {
-  const CoffeeCard({
+class CoffeeCardWidget extends StatelessWidget {
+  const CoffeeCardWidget({
     required this.isFavourite,
     required this.coffee,
     super.key,
@@ -36,11 +36,17 @@ class CoffeeCard extends StatelessWidget {
               },
             ),
             const SizedBox(height: 16),
-            CachedNetworkImage(
-              imageUrl: coffee.url,
-              width: 300,
-              fit: BoxFit.contain,
-              errorWidget: (context, url, error) => const Icon(Icons.error),
+            ConstrainedBox(
+              constraints: const BoxConstraints(minHeight: 400),
+              child: CachedNetworkImage(
+                imageUrl: coffee.url,
+                width: 300,
+                fit: BoxFit.contain,
+                placeholder: (context, url) => const Center(
+                  child: ColoredBox(color: Colors.grey),
+                ),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
+              ),
             ),
           ],
         ),

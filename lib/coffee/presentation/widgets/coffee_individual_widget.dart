@@ -1,6 +1,6 @@
 import 'package:coffee_app/coffee/application/single/coffee_bloc.dart';
 import 'package:coffee_app/coffee/domain/model/coffee.dart';
-import 'package:coffee_app/coffee/presentation/widgets/coffee_card.dart';
+import 'package:coffee_app/coffee/presentation/widgets/coffee_card_widget.dart';
 import 'package:coffee_app/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,7 +28,7 @@ class CoffeeIndividualWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
-                CoffeeCard(isFavourite: isFavourite, coffee: coffee),
+                CoffeeCardWidget(isFavourite: isFavourite, coffee: coffee),
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () {

@@ -1,5 +1,5 @@
 import 'package:coffee_app/coffee/domain/model/coffee.dart';
-import 'package:coffee_app/coffee/presentation/widgets/coffee_card.dart';
+import 'package:coffee_app/coffee/presentation/widgets/coffee_card_widget.dart';
 import 'package:coffee_app/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
@@ -43,7 +43,7 @@ class _FavoriteCoffeesWidgetState extends State<FavoriteCoffeesWidget> {
         final coffee = widget.favouriteCoffees[index];
         final isFavourite = widget.favouriteCoffees.contains(coffee);
         return Center(
-          child: CoffeeCard(isFavourite: isFavourite, coffee: coffee),
+          child: CoffeeCardWidget(isFavourite: isFavourite, coffee: coffee),
         );
       },
     );
