@@ -23,5 +23,9 @@
   "themeModeTitle": "Switch Theme Mode",
   "@themeModeTitle": {
     "description": "Title for the theme mode switcher."
+  },
+  "toggleFavouriteCoffeeError": "Error toggling favourite coffee",
+  "@toggleFavouriteCoffeeError": {
+    "description": "This message is displayed when there is an error toggling a coffee's favourite status."
   }
 }

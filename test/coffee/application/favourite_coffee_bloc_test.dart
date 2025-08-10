@@ -164,6 +164,101 @@ void main() {
           ),
         ],
       );
+
+      blocTest<FavouriteCoffeeBloc, FavouriteCoffeeState>(
+        'should emits [loading, toggleError] when the use case return left '
+        'and the coffee is in the favourites',
+        build: () {
+          mockedLoadFavouriteCoffeesUseCase.mockExecute([
+            const Coffee(url: 'https://example.com/coffee1.jpg'),
+            const Coffee(url: 'https://example.com/coffee2.jpg'),
+          ]);
+          mockedRemoveFavouriteCoffeeUseCase.mockRemoveCoffeeError(
+            const Coffee(url: 'https://example.com/coffee1.jpg'),
+          );
+          return bloc;
+        },
+        seed: () => const FavouriteCoffeeState(
+          status: FavouriteCoffeeStatus.loaded,
+          favouriteCoffees: [
+            Coffee(url: 'https://example.com/coffee1.jpg'),
+            Coffee(url: 'https://example.com/coffee2.jpg'),
+          ],
+        ),
+        act: (FavouriteCoffeeBloc bloc) => bloc.add(
+          const ToggleFavouriteCoffeeEvent(
+            Coffee(url: 'https://example.com/coffee1.jpg'),
+          ),
+        ),
+        expect: () => [
+          const FavouriteCoffeeState(
+            status: FavouriteCoffeeStatus.toggleError,
+            favouriteCoffees: [
+              Coffee(url: 'https://example.com/coffee1.jpg'),
+              Coffee(url: 'https://example.com/coffee2.jpg'),
+            ],
+          ),
+          const FavouriteCoffeeState(
+            status: FavouriteCoffeeStatus.loading,
+            favouriteCoffees: [
+              Coffee(url: 'https://example.com/coffee1.jpg'),
+              Coffee(url: 'https://example.com/coffee2.jpg'),
+            ],
+          ),
+          const FavouriteCoffeeState(
+            status: FavouriteCoffeeStatus.loaded,
+            favouriteCoffees: [
+              Coffee(url: 'https://example.com/coffee1.jpg'),
+              Coffee(url: 'https://example.com/coffee2.jpg'),
+            ],
+          ),
+        ],
+      );
+
+      blocTest<FavouriteCoffeeBloc, FavouriteCoffeeState>(
+        'should emits [loading, toggleError] when the use case return left '
+        'and the coffee is not in the favourites',
+        build: () {
+          mockedLoadFavouriteCoffeesUseCase.mockExecute([
+            const Coffee(url: 'https://example.com/coffee2.jpg'),
+          ]);
+          mockedAddFavouriteCoffeeUseCase.mockAddCoffeeError(
+            const Coffee(url: 'https://example.com/coffee1.jpg'),
+          );
+          return bloc;
+        },
+        seed: () => const FavouriteCoffeeState(
+          status: FavouriteCoffeeStatus.loaded,
+          favouriteCoffees: [
+            Coffee(url: 'https://example.com/coffee2.jpg'),
+          ],
+        ),
+        act: (FavouriteCoffeeBloc bloc) => bloc.add(
+          const ToggleFavouriteCoffeeEvent(
+            Coffee(url: 'https://example.com/coffee1.jpg'),
+          ),
+        ),
+        expect: () => [
+          const FavouriteCoffeeState(
+            status: FavouriteCoffeeStatus.toggleError,
+            favouriteCoffees: [
+              Coffee(url: 'https://example.com/coffee2.jpg'),
+            ],
+          ),
+          const FavouriteCoffeeState(
+            status: FavouriteCoffeeStatus.loading,
+            favouriteCoffees: [
+              Coffee(url: 'https://example.com/coffee2.jpg'),
+            ],
+          ),
+          const FavouriteCoffeeState(
+            status: FavouriteCoffeeStatus.loaded,
+            favouriteCoffees: [
+              Coffee(url: 'https://example.com/coffee2.jpg'),
+            ],
+          ),
+        ],
+      );
     });
   });
 

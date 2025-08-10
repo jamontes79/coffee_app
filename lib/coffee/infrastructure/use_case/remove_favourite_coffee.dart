@@ -18,7 +18,7 @@ class RemoveFavouriteCoffee implements RemoveFavouriteCoffeeUseCase {
 
       return right(unit);
     } on Exception catch (_) {
-      return left(CoffeeNotFoundFailure());
+      return left(RemoveFavouriteCoffeeFailure());
     }
   }
 }

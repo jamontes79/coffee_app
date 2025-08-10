@@ -21,7 +21,7 @@ class LoadFavouriteCoffees implements LoadFavoriteCoffeesUseCase {
         return right(coffees);
       });
     } on Exception catch (_) {
-      yield left(CoffeeNotFoundFailure());
+      yield left(LoadFavouritesFailure());
     }
   }
 }

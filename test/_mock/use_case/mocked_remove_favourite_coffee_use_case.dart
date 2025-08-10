@@ -10,9 +10,9 @@ class MockedRemoveFavouriteCoffeeUseCase extends Mock
     when(() => execute(coffee)).thenAnswer((_) async => right(unit));
   }
 
-  void mockLoadCoffeesError(Coffee coffee) {
+  void mockRemoveCoffeeError(Coffee coffee) {
     when(
       () => execute(coffee),
-    ).thenAnswer((_) async => left(CoffeeNotFoundFailure()));
+    ).thenAnswer((_) async => left(RemoveFavouriteCoffeeFailure()));
   }
 }

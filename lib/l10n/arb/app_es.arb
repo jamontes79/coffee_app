@@ -23,5 +23,9 @@
   "themeModeTitle": "Cambiar modo de tema",
   "@themeModeTitle": {
     "description": "Título del conmutador de modo de tema."
+  },
+  "toggleFavouriteCoffeeError": "Error al alternar el café favorito",
+  "@toggleFavouriteCoffeeError": {
+    "description": "Este mensaje se muestra cuando hay un error al alternar el estado favorito de un café."
   }
 }
