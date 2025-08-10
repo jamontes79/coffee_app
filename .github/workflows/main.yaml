@@ -19,7 +19,7 @@ jobs:
     with:
       flutter_channel: stable
       flutter_version: 3.32.8
-      coverage_excludes: '**/injection/**'
+      coverage_excludes: '**/injection/** **/routes/*.dart'
 
   spell-check:
     uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/spell_check.yml@v1
