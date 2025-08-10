@@ -71,7 +71,6 @@ class FavouriteCoffeeBloc
     if (failureOrSuccess.isLeft()) {
       emit(state.copyWith(status: FavouriteCoffeeStatus.toggleError));
     }
-    add(const LoadFavouriteCoffeesEvent());
   }
 
   @override

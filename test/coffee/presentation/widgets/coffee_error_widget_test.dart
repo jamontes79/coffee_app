@@ -6,8 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-import '../../_mock/application/mocked_coffee_bloc.dart';
-import '../../helpers/helpers.dart';
+import '../../../_mock/application/mocked_coffee_bloc.dart';
+import '../../../helpers/helpers.dart';
 
 void main() {
   final mockedCoffeeBloc = MockedCoffeeBloc();
@@ -20,7 +20,6 @@ void main() {
           CoffeeState(
             status: CoffeeStatus.error,
             coffee: Coffee.empty(),
-            favouriteCoffees: const [],
           ),
         );
         await tester.pumpApp(const CoffeeErrorWidget());
@@ -41,7 +40,6 @@ void main() {
           CoffeeState(
             status: CoffeeStatus.error,
             coffee: Coffee.empty(),
-            favouriteCoffees: const [],
           ),
         );
         await tester.pumpApp(

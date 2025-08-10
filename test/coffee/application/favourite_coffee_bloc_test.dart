@@ -2,6 +2,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:coffee_app/coffee/application/favourite/favourite_coffee_bloc.dart';
 import 'package:coffee_app/coffee/domain/model/coffee.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 
 import '../../_mock/use_case/mocked_add_favourite_coffee_use_case.dart';
 import '../../_mock/use_case/mocked_load_favourite_coffees_use_case.dart';
@@ -86,9 +87,6 @@ void main() {
         'should emits [loading, loaded] when the use case return right '
         'and the coffee is in the favourites',
         build: () {
-          mockedLoadFavouriteCoffeesUseCase.mockExecute([
-            const Coffee(url: 'https://example.com/coffee2.jpg'),
-          ]);
           mockedRemoveFavouriteCoffeeUseCase.mockExecute(
             const Coffee(url: 'https://example.com/coffee1.jpg'),
           );
@@ -106,32 +104,20 @@ void main() {
             Coffee(url: 'https://example.com/coffee1.jpg'),
           ),
         ),
-        expect: () => [
-          const FavouriteCoffeeState(
-            status: FavouriteCoffeeStatus.loading,
-
-            favouriteCoffees: [
-              Coffee(url: 'https://example.com/coffee1.jpg'),
-              Coffee(url: 'https://example.com/coffee2.jpg'),
-            ],
-          ),
-          const FavouriteCoffeeState(
-            status: FavouriteCoffeeStatus.loaded,
-            favouriteCoffees: [
-              Coffee(url: 'https://example.com/coffee2.jpg'),
-            ],
-          ),
-        ],
+        expect: () => <FavouriteCoffeeState>[],
+        verify: (bloc) {
+          verify(
+            () => mockedRemoveFavouriteCoffeeUseCase.execute(
+              const Coffee(url: 'https://example.com/coffee1.jpg'),
+            ),
+          ).called(1);
+        },
       );
 
       blocTest<FavouriteCoffeeBloc, FavouriteCoffeeState>(
         'should emits [loading, loaded] when the use case return right '
         'and the coffee is not in the favourites',
         build: () {
-          mockedLoadFavouriteCoffeesUseCase.mockExecute([
-            const Coffee(url: 'https://example.com/coffee2.jpg'),
-            const Coffee(url: 'https://example.com/coffee1.jpg'),
-          ]);
           mockedAddFavouriteCoffeeUseCase.mockExecute(
             const Coffee(url: 'https://example.com/coffee1.jpg'),
           );
@@ -148,31 +134,20 @@ void main() {
             Coffee(url: 'https://example.com/coffee1.jpg'),
           ),
         ),
-        expect: () => [
-          const FavouriteCoffeeState(
-            status: FavouriteCoffeeStatus.loading,
-            favouriteCoffees: [
-              Coffee(url: 'https://example.com/coffee2.jpg'),
-            ],
-          ),
-          const FavouriteCoffeeState(
-            status: FavouriteCoffeeStatus.loaded,
-            favouriteCoffees: [
-              Coffee(url: 'https://example.com/coffee2.jpg'),
-              Coffee(url: 'https://example.com/coffee1.jpg'),
-            ],
-          ),
-        ],
+        expect: () => <FavouriteCoffeeState>[],
+        verify: (bloc) {
+          verify(
+            () => mockedAddFavouriteCoffeeUseCase.execute(
+              const Coffee(url: 'https://example.com/coffee1.jpg'),
+            ),
+          ).called(1);
+        },
       );
 
       blocTest<FavouriteCoffeeBloc, FavouriteCoffeeState>(
         'should emits [loading, toggleError] when the use case return left '
         'and the coffee is in the favourites',
         build: () {
-          mockedLoadFavouriteCoffeesUseCase.mockExecute([
-            const Coffee(url: 'https://example.com/coffee1.jpg'),
-            const Coffee(url: 'https://example.com/coffee2.jpg'),
-          ]);
           mockedRemoveFavouriteCoffeeUseCase.mockRemoveCoffeeError(
             const Coffee(url: 'https://example.com/coffee1.jpg'),
           );
@@ -198,20 +173,6 @@ void main() {
               Coffee(url: 'https://example.com/coffee2.jpg'),
             ],
           ),
-          const FavouriteCoffeeState(
-            status: FavouriteCoffeeStatus.loading,
-            favouriteCoffees: [
-              Coffee(url: 'https://example.com/coffee1.jpg'),
-              Coffee(url: 'https://example.com/coffee2.jpg'),
-            ],
-          ),
-          const FavouriteCoffeeState(
-            status: FavouriteCoffeeStatus.loaded,
-            favouriteCoffees: [
-              Coffee(url: 'https://example.com/coffee1.jpg'),
-              Coffee(url: 'https://example.com/coffee2.jpg'),
-            ],
-          ),
         ],
       );
 
@@ -219,9 +180,6 @@ void main() {
         'should emits [loading, toggleError] when the use case return left '
         'and the coffee is not in the favourites',
         build: () {
-          mockedLoadFavouriteCoffeesUseCase.mockExecute([
-            const Coffee(url: 'https://example.com/coffee2.jpg'),
-          ]);
           mockedAddFavouriteCoffeeUseCase.mockAddCoffeeError(
             const Coffee(url: 'https://example.com/coffee1.jpg'),
           );
@@ -241,18 +199,6 @@ void main() {
         expect: () => [
           const FavouriteCoffeeState(
             status: FavouriteCoffeeStatus.toggleError,
-            favouriteCoffees: [
-              Coffee(url: 'https://example.com/coffee2.jpg'),
-            ],
-          ),
-          const FavouriteCoffeeState(
-            status: FavouriteCoffeeStatus.loading,
-            favouriteCoffees: [
-              Coffee(url: 'https://example.com/coffee2.jpg'),
-            ],
-          ),
-          const FavouriteCoffeeState(
-            status: FavouriteCoffeeStatus.loaded,
             favouriteCoffees: [
               Coffee(url: 'https://example.com/coffee2.jpg'),
             ],

@@ -10,9 +10,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:mocktail_image_network/mocktail_image_network.dart';
 
-import '../../_mock/application/mocked_coffee_bloc.dart';
-import '../../_mock/application/mocked_favourite_coffee_bloc.dart';
-import '../../helpers/helpers.dart';
+import '../../../_mock/application/mocked_coffee_bloc.dart';
+import '../../../_mock/application/mocked_favourite_coffee_bloc.dart';
+import '../../../helpers/helpers.dart';
 
 void main() {
   const coffee = Coffee(url: 'https://example.com/espresso.jpg');
@@ -26,10 +26,9 @@ void main() {
     );
   final mockedBloc = MockedCoffeeBloc()
     ..mockState(
-      CoffeeState(
+      const CoffeeState(
         status: CoffeeStatus.loaded,
         coffee: coffee,
-        favouriteCoffees: favouriteCoffees,
       ),
     );
   group(CoffeeIndividualWidget, () {
@@ -42,7 +41,6 @@ void main() {
               mockedBloc,
               mockedFavouriteCoffeesBloc,
               coffee,
-              favouriteCoffees,
             ),
           ),
         );
@@ -67,7 +65,6 @@ void main() {
               mockedBloc,
               mockedFavouriteCoffeesBloc,
               coffee,
-              favouriteCoffees,
             ),
           ),
         );
@@ -94,7 +91,6 @@ void main() {
               mockedBloc,
               mockedFavouriteCoffeesBloc,
               coffee,
-              favouriteCoffees,
             ),
           ),
         );
@@ -117,10 +113,8 @@ class _TesterWidget extends StatelessWidget {
     this.coffeeBloc,
     this.favouriteCoffeeBloc,
     this.coffee,
-    this.favouriteCoffees,
   );
   final Coffee coffee;
-  final List<Coffee> favouriteCoffees;
   final CoffeeBloc coffeeBloc;
   final fav_coffee_bloc.FavouriteCoffeeBloc favouriteCoffeeBloc;
   @override
@@ -131,7 +125,6 @@ class _TesterWidget extends StatelessWidget {
         value: coffeeBloc,
         child: CoffeeIndividualWidget(
           coffee: coffee,
-          favouriteCoffees: favouriteCoffees,
         ),
       ),
     );

@@ -1,15 +1,14 @@
+import 'package:coffee_app/coffee/application/favourite/favourite_coffee_bloc.dart';
 import 'package:coffee_app/coffee/domain/model/coffee.dart';
 import 'package:coffee_app/coffee/presentation/widgets/coffee_card_widget.dart';
 import 'package:coffee_app/l10n/l10n.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class FavoriteCoffeesWidget extends StatefulWidget {
   const FavoriteCoffeesWidget({
-    required this.favouriteCoffees,
     super.key,
   });
-
-  final List<Coffee> favouriteCoffees;
 
   @override
   State<FavoriteCoffeesWidget> createState() => _FavoriteCoffeesWidgetState();
@@ -32,18 +31,29 @@ class _FavoriteCoffeesWidgetState extends State<FavoriteCoffeesWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    if (widget.favouriteCoffees.isEmpty) {
-      return Center(child: Text(l10n.coffeesEmpty));
-    }
-    return PageView.builder(
-      controller: _pageController,
-      itemCount: widget.favouriteCoffees.length,
-      itemBuilder: (context, index) {
-        final coffee = widget.favouriteCoffees[index];
-        final isFavourite = widget.favouriteCoffees.contains(coffee);
-        return Center(
-          child: CoffeeCardWidget(isFavourite: isFavourite, coffee: coffee),
+    return BlocSelector<
+      FavouriteCoffeeBloc,
+      FavouriteCoffeeState,
+      List<Coffee>
+    >(
+      selector: (state) => state.favouriteCoffees,
+      builder: (context, favouriteCoffees) {
+        final l10n = context.l10n;
+        if (favouriteCoffees.isEmpty) {
+          return Center(
+            child: Text(l10n.coffeesEmpty),
+          );
+        }
+        return PageView.builder(
+          controller: _pageController,
+          itemCount: favouriteCoffees.length,
+          itemBuilder: (context, index) {
+            final coffee = favouriteCoffees[index];
+
+            return Center(
+              child: CoffeeCardWidget(coffee: coffee),
+            );
+          },
         );
       },
     );

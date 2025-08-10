@@ -51,10 +51,8 @@ class CoffeePage extends StatelessWidget {
               child: CircularProgressIndicator(),
             ),
             CoffeeStatus.error => const CoffeeErrorWidget(),
-            CoffeeStatus.loaded ||
-            CoffeeStatus.loadingFavourites => CoffeeIndividualWidget(
+            CoffeeStatus.loaded => CoffeeIndividualWidget(
               coffee: state.coffee,
-              favouriteCoffees: state.favouriteCoffees,
             ),
           },
         );
