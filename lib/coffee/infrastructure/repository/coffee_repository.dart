@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:get_storage/get_storage.dart';
@@ -43,7 +44,21 @@ class CoffeeRepository {
     }
   }
 
-  Future<List<Map<String, dynamic>>> getFavoriteCoffees() async {
+  Stream<List<Map<String, dynamic>>> getFavoriteCoffees() {
+    final controller = StreamController<List<Map<String, dynamic>>>();
+    void emitFavorites(_) {
+      controller.add(_getFavoriteCoffeesList());
+    }
+
+    emitFavorites(null);
+
+    _getStorage.listenKey(_key, emitFavorites);
+
+    controller.onCancel = controller.close;
+    return controller.stream;
+  }
+
+  List<Map<String, dynamic>> _getFavoriteCoffeesList() {
     final favoriteCoffees = _getStorage.read<List<dynamic>>(_key) ?? [];
     return favoriteCoffees
         .map((coffee) => jsonDecode(coffee as String) as Map<String, dynamic>)

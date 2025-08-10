@@ -13,4 +13,10 @@ class MockedGetStorage extends Mock implements GetStorage {
       () => read<List<dynamic>>(key),
     ).thenReturn(expected);
   }
+
+  void mockListenKey() {
+    when(
+      () => listenKey(any(), any()),
+    ).thenAnswer((_) => () {});
+  }
 }

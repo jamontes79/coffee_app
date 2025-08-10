@@ -28,7 +28,7 @@ class MockedCoffeeRepository extends Mock implements CoffeeRepository {
   }
 
   void mockGetFavouriteCoffees({required Map<String, String> expected}) {
-    when(getFavoriteCoffees).thenAnswer((_) async => [expected]);
+    when(getFavoriteCoffees).thenAnswer((_) => Stream.value([expected]));
   }
 
   void mockGetFavouriteCoffeesError() {

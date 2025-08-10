@@ -11,17 +11,16 @@ class LoadFavouriteCoffees implements LoadFavoriteCoffeesUseCase {
 
   final CoffeeRepository _coffeeRepository;
   @override
-  Future<Either<CoffeeFailure, List<Coffee>>> execute() async {
+  Stream<Either<CoffeeFailure, List<Coffee>>> execute() async* {
     try {
-      final coffeesData = await _coffeeRepository.getFavoriteCoffees();
-
-      final coffees = coffeesData.map((coffeeData) {
-        return Coffee(url: coffeeData['url'] as String);
-      }).toList();
-
-      return right(coffees);
+      yield* _coffeeRepository.getFavoriteCoffees().map((coffeesData) {
+        final coffees = coffeesData.map((coffeeData) {
+          return Coffee(url: coffeeData['url'] as String);
+        }).toList();
+        return right(coffees);
+      });
     } on Exception catch (_) {
-      return left(CoffeeNotFoundFailure());
+      yield left(CoffeeNotFoundFailure());
     }
   }
 }
