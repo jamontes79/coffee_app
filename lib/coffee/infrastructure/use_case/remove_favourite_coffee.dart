@@ -10,6 +10,7 @@ class RemoveFavouriteCoffee implements RemoveFavouriteCoffeeUseCase {
   RemoveFavouriteCoffee(this._coffeeRepository);
 
   final CoffeeRepository _coffeeRepository;
+
   @override
   Future<Either<CoffeeFailure, Unit>> execute(Coffee coffee) async {
     try {

@@ -10,6 +10,7 @@ class LoadCoffee implements LoadCoffeeUseCase {
   LoadCoffee(this._coffeeRepository);
 
   final CoffeeRepository _coffeeRepository;
+
   @override
   Future<Either<CoffeeFailure, Coffee>> execute() async {
     try {

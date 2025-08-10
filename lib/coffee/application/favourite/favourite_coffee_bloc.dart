@@ -13,6 +13,8 @@ import 'package:injectable/injectable.dart';
 part 'favourite_coffee_event.dart';
 part 'favourite_coffee_state.dart';
 
+/// Bloc for managing the state of favourite coffees.
+/// It handles loading, adding, and removing favourite coffees.
 @injectable
 class FavouriteCoffeeBloc
     extends Bloc<FavouriteCoffeeEvent, FavouriteCoffeeState> {
