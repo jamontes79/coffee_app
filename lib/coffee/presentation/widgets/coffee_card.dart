@@ -36,11 +36,17 @@ class CoffeeCard extends StatelessWidget {
               },
             ),
             const SizedBox(height: 16),
-            CachedNetworkImage(
-              imageUrl: coffee.url,
-              width: 300,
-              fit: BoxFit.contain,
-              errorWidget: (context, url, error) => const Icon(Icons.error),
+            ConstrainedBox(
+              constraints: const BoxConstraints(minHeight: 400),
+              child: CachedNetworkImage(
+                imageUrl: coffee.url,
+                width: 300,
+                fit: BoxFit.contain,
+                placeholder: (context, url) => const Center(
+                  child: ColoredBox(color: Colors.grey),
+                ),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
+              ),
             ),
           ],
         ),
