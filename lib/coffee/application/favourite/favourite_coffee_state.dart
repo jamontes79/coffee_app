@@ -5,6 +5,7 @@ enum FavouriteCoffeeStatus {
   loading,
   loaded,
   error,
+  toggleError,
 }
 
 final class FavouriteCoffeeState extends Equatable {

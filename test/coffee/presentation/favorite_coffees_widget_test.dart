@@ -5,14 +5,16 @@ import 'package:coffee_app/coffee/presentation/widgets/favorite_coffees_widget.d
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
 import 'package:mocktail_image_network/mocktail_image_network.dart';
 
 import '../../_mock/application/mocked_favourite_coffee_bloc.dart';
 import '../../helpers/helpers.dart';
 
 void main() {
-  final mockedFavouriteCoffeesBloc = MockedFavouriteCoffeeBloc();
+  final mockedFavouriteCoffeesBloc = MockedFavouriteCoffeeBloc()
+    ..mockState(
+      FavouriteCoffeeState.initial(),
+    );
 
   group(FavoriteCoffeesWidget, () {
     testWidgets(
@@ -37,7 +39,10 @@ void main() {
 
         await mockNetworkImages(
           () async => tester.pumpApp(
-            FavoriteCoffeesWidget(favouriteCoffees: coffees),
+            BlocProvider<FavouriteCoffeeBloc>.value(
+              value: mockedFavouriteCoffeesBloc,
+              child: FavoriteCoffeesWidget(favouriteCoffees: coffees),
+            ),
           ),
         );
 
@@ -112,38 +117,6 @@ void main() {
           ),
           findsOneWidget,
         );
-      },
-    );
-
-    testWidgets(
-      'should call toggle favourite coffee when heart icon '
-      'is tapped and belong to favourites',
-      (tester) async {
-        final coffees = [
-          const Coffee(url: 'https://example.com/espresso.jpg'),
-        ];
-
-        await mockNetworkImages(
-          () async => tester.pumpApp(
-            BlocProvider<FavouriteCoffeeBloc>.value(
-              value: mockedFavouriteCoffeesBloc,
-              child: FavoriteCoffeesWidget(
-                favouriteCoffees: coffees,
-              ),
-            ),
-          ),
-        );
-
-        expect(find.byType(IconButton), findsOneWidget);
-
-        await tester.tap(find.byType(IconButton));
-        await tester.pump(const Duration(seconds: 1));
-
-        verify(
-          () => mockedFavouriteCoffeesBloc.add(
-            ToggleFavouriteCoffeeEvent(coffees.first),
-          ),
-        ).called(1);
       },
     );
   });

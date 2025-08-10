@@ -58,10 +58,18 @@ class FavouriteCoffeeBloc
     ToggleFavouriteCoffeeEvent event,
     Emitter<FavouriteCoffeeState> emit,
   ) async {
+    late Either<CoffeeFailure, Unit> failureOrSuccess;
     if (state.favouriteCoffees.contains(event.coffee)) {
-      await _removeFavouriteCoffeeUseCase.execute(event.coffee);
+      failureOrSuccess = await _removeFavouriteCoffeeUseCase.execute(
+        event.coffee,
+      );
     } else {
-      await _addFavouriteCoffeeUseCase.execute(event.coffee);
+      failureOrSuccess = await _addFavouriteCoffeeUseCase.execute(
+        event.coffee,
+      );
+    }
+    if (failureOrSuccess.isLeft()) {
+      emit(state.copyWith(status: FavouriteCoffeeStatus.toggleError));
     }
     add(const LoadFavouriteCoffeesEvent());
   }

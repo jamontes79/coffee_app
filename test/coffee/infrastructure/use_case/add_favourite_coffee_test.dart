@@ -64,7 +64,7 @@ void main() {
 
         expect(result.isLeft(), isTrue);
         result.fold(
-          (failure) => expect(failure, isA<CoffeeNotFoundFailure>()),
+          (failure) => expect(failure, isA<AddFavouriteCoffeeFailure>()),
           (coffees) => fail('Expected left, got right: $coffees'),
         );
       });

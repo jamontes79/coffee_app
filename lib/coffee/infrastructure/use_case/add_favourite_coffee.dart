@@ -18,7 +18,7 @@ class AddFavouriteCoffee implements AddFavouriteCoffeeUseCase {
 
       return right(unit);
     } on Exception catch (_) {
-      return left(CoffeeNotFoundFailure());
+      return left(AddFavouriteCoffeeFailure());
     }
   }
 }
