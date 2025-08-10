@@ -10,6 +10,7 @@ class LoadFavouriteCoffees implements LoadFavoriteCoffeesUseCase {
   LoadFavouriteCoffees(this._coffeeRepository);
 
   final CoffeeRepository _coffeeRepository;
+
   @override
   Stream<Either<CoffeeFailure, List<Coffee>>> execute() async* {
     try {

@@ -12,6 +12,8 @@ import 'package:injectable/injectable.dart';
 part 'coffee_event.dart';
 part 'coffee_state.dart';
 
+/// Bloc for managing the state of coffee.
+/// It handles loading coffee data and refreshing the list of favorite coffees.
 @injectable
 class CoffeeBloc extends Bloc<CoffeeEvent, CoffeeState> {
   CoffeeBloc(this._loadCoffeeUseCase, this._loadFavoriteCoffeesUseCase)
