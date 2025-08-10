@@ -23,10 +23,7 @@ class FavouriteCoffeesPage extends StatelessWidget {
               child: CircularProgressIndicator(),
             ),
             FavouriteCoffeeStatus.error => const CoffeeErrorWidget(),
-            FavouriteCoffeeStatus.loaded ||
-            FavouriteCoffeeStatus.toggleError => FavoriteCoffeesWidget(
-              favouriteCoffees: state.favouriteCoffees,
-            ),
+            _ => const FavoriteCoffeesWidget(),
           },
         );
       },

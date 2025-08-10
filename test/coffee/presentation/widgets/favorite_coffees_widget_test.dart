@@ -7,22 +7,28 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail_image_network/mocktail_image_network.dart';
 
-import '../../_mock/application/mocked_favourite_coffee_bloc.dart';
-import '../../helpers/helpers.dart';
+import '../../../_mock/application/mocked_favourite_coffee_bloc.dart';
+import '../../../helpers/helpers.dart';
 
 void main() {
-  final mockedFavouriteCoffeesBloc = MockedFavouriteCoffeeBloc()
-    ..mockState(
-      FavouriteCoffeeState.initial(),
-    );
+  const coffee = Coffee(url: 'https://example.com/espresso.jpg');
+  late MockedFavouriteCoffeeBloc mockedFavouriteCoffeesBloc;
+
+  setUp(() {
+    mockedFavouriteCoffeesBloc = MockedFavouriteCoffeeBloc();
+  });
 
   group(FavoriteCoffeesWidget, () {
     testWidgets(
       'should render empty message when coffees list is empty',
       (tester) async {
-        await tester.pumpApp(
-          const FavoriteCoffeesWidget(favouriteCoffees: []),
+        mockedFavouriteCoffeesBloc.mockState(
+          const FavouriteCoffeeState(
+            status: FavouriteCoffeeStatus.loaded,
+            favouriteCoffees: [],
+          ),
         );
+        await tester.pumpApp(_TesterWidget(mockedFavouriteCoffeesBloc));
 
         final emptyMessageFinder = find.text('No coffees available');
 
@@ -33,17 +39,14 @@ void main() {
     testWidgets(
       'should render coffee card when coffees list is not empty',
       (tester) async {
-        final coffees = [
-          const Coffee(url: 'https://example.com/espresso.jpg'),
-        ];
-
-        await mockNetworkImages(
-          () async => tester.pumpApp(
-            BlocProvider<FavouriteCoffeeBloc>.value(
-              value: mockedFavouriteCoffeesBloc,
-              child: FavoriteCoffeesWidget(favouriteCoffees: coffees),
-            ),
+        mockedFavouriteCoffeesBloc.mockState(
+          const FavouriteCoffeeState(
+            status: FavouriteCoffeeStatus.loaded,
+            favouriteCoffees: [coffee],
           ),
+        );
+        await mockNetworkImages(
+          () async => tester.pumpApp(_TesterWidget(mockedFavouriteCoffeesBloc)),
         );
 
         expect(find.byType(Image), findsOneWidget);
@@ -76,14 +79,7 @@ void main() {
         );
 
         await mockNetworkImages(
-          () async => tester.pumpApp(
-            BlocProvider<FavouriteCoffeeBloc>.value(
-              value: mockedFavouriteCoffeesBloc,
-              child: FavoriteCoffeesWidget(
-                favouriteCoffees: coffees,
-              ),
-            ),
-          ),
+          () async => tester.pumpApp(_TesterWidget(mockedFavouriteCoffeesBloc)),
         );
 
         expect(
@@ -120,4 +116,16 @@ void main() {
       },
     );
   });
+}
+
+class _TesterWidget extends StatelessWidget {
+  const _TesterWidget(this.mockedFavouriteCoffeesBloc);
+  final MockedFavouriteCoffeeBloc mockedFavouriteCoffeesBloc;
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider<FavouriteCoffeeBloc>.value(
+      value: mockedFavouriteCoffeesBloc,
+      child: const FavoriteCoffeesWidget(),
+    );
+  }
 }

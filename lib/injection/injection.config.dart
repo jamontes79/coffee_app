@@ -68,10 +68,7 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i331.AddFavouriteCoffee(gh<_i920.CoffeeRepository>()),
     );
     gh.factory<_i445.CoffeeBloc>(
-      () => _i445.CoffeeBloc(
-        gh<_i474.LoadCoffeeUseCase>(),
-        gh<_i521.LoadFavoriteCoffeesUseCase>(),
-      ),
+      () => _i445.CoffeeBloc(gh<_i474.LoadCoffeeUseCase>()),
     );
     gh.factory<_i843.FavouriteCoffeeBloc>(
       () => _i843.FavouriteCoffeeBloc(

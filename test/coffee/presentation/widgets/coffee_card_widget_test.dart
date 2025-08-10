@@ -6,8 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-import '../../_mock/application/mocked_favourite_coffee_bloc.dart';
-import '../../helpers/helpers.dart';
+import '../../../_mock/application/mocked_favourite_coffee_bloc.dart';
+import '../../../helpers/helpers.dart';
 
 void main() {
   const coffee = Coffee(
@@ -15,8 +15,7 @@ void main() {
   );
   late MockedFavouriteCoffeeBloc mockedFavouriteCoffeeBloc;
   setUp(() {
-    mockedFavouriteCoffeeBloc = MockedFavouriteCoffeeBloc()
-      ..mockState(FavouriteCoffeeState.initial());
+    mockedFavouriteCoffeeBloc = MockedFavouriteCoffeeBloc();
   });
 
   group(CoffeeCardWidget, () {
@@ -24,11 +23,11 @@ void main() {
       'should render with heart not filled '
       'when coffee is not favourite',
       (tester) async {
+        mockedFavouriteCoffeeBloc.mockState(FavouriteCoffeeState.initial());
         await tester.pumpApp(
           BlocProvider<FavouriteCoffeeBloc>.value(
             value: mockedFavouriteCoffeeBloc,
             child: const CoffeeCardWidget(
-              isFavourite: false,
               coffee: coffee,
             ),
           ),
@@ -42,11 +41,16 @@ void main() {
       'should render with heart filled '
       'when coffee is favourite',
       (tester) async {
+        mockedFavouriteCoffeeBloc.mockState(
+          const FavouriteCoffeeState(
+            status: FavouriteCoffeeStatus.loaded,
+            favouriteCoffees: [coffee],
+          ),
+        );
         await tester.pumpApp(
           BlocProvider<FavouriteCoffeeBloc>.value(
             value: mockedFavouriteCoffeeBloc,
             child: const CoffeeCardWidget(
-              isFavourite: true,
               coffee: coffee,
             ),
           ),
@@ -60,11 +64,17 @@ void main() {
       'should call toggle favourite coffee event '
       'when heart is pressed',
       (tester) async {
+        mockedFavouriteCoffeeBloc.mockState(
+          const FavouriteCoffeeState(
+            status: FavouriteCoffeeStatus.loaded,
+            favouriteCoffees: [],
+          ),
+        );
+
         await tester.pumpApp(
           BlocProvider<FavouriteCoffeeBloc>.value(
             value: mockedFavouriteCoffeeBloc,
             child: const CoffeeCardWidget(
-              isFavourite: false,
               coffee: coffee,
             ),
           ),
@@ -85,21 +95,27 @@ void main() {
       'should show snackbar with error message '
       'when toggle favourite coffee fails',
       (tester) async {
-        mockedFavouriteCoffeeBloc.mockListen(
-          [
+        mockedFavouriteCoffeeBloc
+          ..mockState(
             const FavouriteCoffeeState(
-              status: FavouriteCoffeeStatus.toggleError,
-              favouriteCoffees: [coffee],
+              status: FavouriteCoffeeStatus.loaded,
+              favouriteCoffees: [],
             ),
-          ],
-        );
+          )
+          ..mockListen(
+            [
+              const FavouriteCoffeeState(
+                status: FavouriteCoffeeStatus.toggleError,
+                favouriteCoffees: [coffee],
+              ),
+            ],
+          );
 
         await tester.pumpApp(
           BlocProvider<FavouriteCoffeeBloc>.value(
             value: mockedFavouriteCoffeeBloc,
             child: const Scaffold(
               body: CoffeeCardWidget(
-                isFavourite: false,
                 coffee: coffee,
               ),
             ),

@@ -8,12 +8,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class CoffeeIndividualWidget extends StatelessWidget {
   const CoffeeIndividualWidget({
     required this.coffee,
-    required this.favouriteCoffees,
+
     super.key,
   });
 
   final Coffee coffee;
-  final List<Coffee> favouriteCoffees;
 
   @override
   Widget build(BuildContext context) {
@@ -21,14 +20,13 @@ class CoffeeIndividualWidget extends StatelessWidget {
 
     return BlocBuilder<CoffeeBloc, CoffeeState>(
       builder: (context, state) {
-        final isFavourite = state.favouriteCoffees.contains(coffee);
         return Center(
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
-                CoffeeCardWidget(isFavourite: isFavourite, coffee: coffee),
+                CoffeeCardWidget(coffee: coffee),
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () {

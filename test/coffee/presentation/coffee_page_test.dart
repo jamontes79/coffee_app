@@ -47,7 +47,6 @@ void main() {
               coffee: Coffee(
                 url: 'https://example.com/coffee.jpg',
               ),
-              favouriteCoffees: [],
             ),
           );
           await tester.pumpApp(
@@ -78,7 +77,6 @@ void main() {
               coffee: Coffee(
                 url: 'https://example.com/coffee.jpg',
               ),
-              favouriteCoffees: [],
             ),
           );
           await tester.pumpApp(
@@ -113,7 +111,6 @@ void main() {
               coffee: Coffee(
                 url: 'https://example.com/coffee.jpg',
               ),
-              favouriteCoffees: [],
             ),
           );
           await tester.pumpApp(
@@ -149,7 +146,6 @@ void main() {
             CoffeeState(
               status: CoffeeStatus.loading,
               coffee: Coffee.empty(),
-              favouriteCoffees: const [],
             ),
           );
           await tester.pumpApp(
@@ -173,7 +169,6 @@ void main() {
             CoffeeState(
               status: CoffeeStatus.initial,
               coffee: Coffee.empty(),
-              favouriteCoffees: const [],
             ),
           );
           await tester.pumpApp(
@@ -199,7 +194,6 @@ void main() {
             CoffeeState(
               status: CoffeeStatus.error,
               coffee: Coffee.empty(),
-              favouriteCoffees: const [],
             ),
           );
           await tester.pumpApp(
@@ -227,7 +221,6 @@ void main() {
               coffee: Coffee(
                 url: 'https://example.com/coffee.jpg',
               ),
-              favouriteCoffees: [],
             ),
           );
           await tester.pumpApp(
