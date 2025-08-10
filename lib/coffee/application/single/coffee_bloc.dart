@@ -1,8 +1,10 @@
 import 'dart:async';
 
+import 'package:coffee_app/coffee/domain/failure/coffee_failure.dart';
 import 'package:coffee_app/coffee/domain/model/coffee.dart';
 import 'package:coffee_app/coffee/domain/use_case/load_coffee_use_case.dart';
 import 'package:coffee_app/coffee/domain/use_case/load_favorite_coffees_use_case.dart';
+import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:injectable/injectable.dart';
@@ -21,13 +23,16 @@ class CoffeeBloc extends Bloc<CoffeeEvent, CoffeeState> {
   final LoadCoffeeUseCase _loadCoffeeUseCase;
   final LoadFavoriteCoffeesUseCase _loadFavoriteCoffeesUseCase;
 
+  StreamSubscription<Either<CoffeeFailure, List<Coffee>>>?
+  _favouritesSubscription;
+
   Future<void> _onLoadCoffeeEvent(
     LoadCoffeeEvent event,
     Emitter<CoffeeState> emit,
   ) async {
     emit(state.copyWith(status: CoffeeStatus.loading));
     final failureOrCoffee = await _loadCoffeeUseCase.execute();
-    final failureOrFavourites = await _loadFavoriteCoffeesUseCase.execute();
+
     failureOrCoffee.fold(
       (failure) => emit(
         state.copyWith(
@@ -35,13 +40,16 @@ class CoffeeBloc extends Bloc<CoffeeEvent, CoffeeState> {
           coffee: Coffee.empty(),
         ),
       ),
-      (coffee) => emit(
-        state.copyWith(
-          status: CoffeeStatus.loaded,
-          coffee: coffee,
-          favouriteCoffees: failureOrFavourites.getOrElse(() => []),
-        ),
-      ),
+      (coffee) {
+        emit(
+          state.copyWith(
+            status: CoffeeStatus.loaded,
+            coffee: coffee,
+            favouriteCoffees: [],
+          ),
+        );
+        add(const RefreshFavouriteCoffeeEvent());
+      },
     );
   }
 
@@ -49,21 +57,25 @@ class CoffeeBloc extends Bloc<CoffeeEvent, CoffeeState> {
     RefreshFavouriteCoffeeEvent event,
     Emitter<CoffeeState> emit,
   ) async {
-    emit(state.copyWith(status: CoffeeStatus.loading));
-    final failureOrFavourites = await _loadFavoriteCoffeesUseCase.execute();
-    failureOrFavourites.fold(
-      (failure) => emit(
-        state.copyWith(
+    emit(state.copyWith(status: CoffeeStatus.loadingFavourites));
+    await emit.forEach<Either<CoffeeFailure, List<Coffee>>>(
+      _loadFavoriteCoffeesUseCase.execute(),
+      onData: (failureOrFavourites) => failureOrFavourites.fold(
+        (failure) => state.copyWith(
           status: CoffeeStatus.error,
           favouriteCoffees: [],
         ),
-      ),
-      (favourites) => emit(
-        state.copyWith(
+        (favourites) => state.copyWith(
           status: CoffeeStatus.loaded,
           favouriteCoffees: favourites,
         ),
       ),
     );
+  }
+
+  @override
+  Future<void> close() async {
+    await _favouritesSubscription?.cancel();
+    return super.close();
   }
 }

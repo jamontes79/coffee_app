@@ -109,15 +109,18 @@ void main() {
 
     group('getFavoriteCoffees', () {
       test(
-        'getFavoriteCoffees should return a list of favorite coffees',
+        'should return a list of favorite coffees',
         () async {
           final coffee = {'file': 'https://example.com/coffee.jpg'};
-          mockedGetStorage.mockRead(
-            key: storageKey,
-            expected: [jsonEncode(coffee)],
-          );
+          mockedGetStorage
+            ..mockRead(
+              key: storageKey,
+              expected: [jsonEncode(coffee)],
+            )
+            ..mockListenKey();
 
-          final result = await coffeeRepository.getFavoriteCoffees();
+          final stream = coffeeRepository.getFavoriteCoffees();
+          final result = await stream.first;
 
           expect(result, isA<List<Map<String, dynamic>>>());
           expect(result.length, 1);
@@ -126,11 +129,14 @@ void main() {
       );
 
       test(
-        'getFavoriteCoffees should return an empty list if no favorites',
+        'should return an empty list if no favorites',
         () async {
-          mockedGetStorage.mockRead(key: storageKey, expected: null);
+          mockedGetStorage
+            ..mockRead(key: storageKey, expected: null)
+            ..mockListenKey();
 
-          final result = await coffeeRepository.getFavoriteCoffees();
+          final stream = coffeeRepository.getFavoriteCoffees();
+          final result = await stream.first;
 
           expect(result, isA<List<Map<String, dynamic>>>());
           expect(result.isEmpty, true);

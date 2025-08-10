@@ -22,7 +22,8 @@ void main() {
           expected: {'url': 'https://example.com/coffee.jpg'},
         );
 
-        await loadFavouriteCoffee.execute();
+        final stream = loadFavouriteCoffee.execute();
+        await stream.first;
 
         verify(() => mockedCoffeeRepository.getFavoriteCoffees()).called(1);
         verifyNoMoreInteractions(mockedCoffeeRepository);
@@ -33,7 +34,8 @@ void main() {
           expected: {'url': 'https://example.com/coffee1.jpg'},
         );
 
-        final result = await loadFavouriteCoffee.execute();
+        final stream = loadFavouriteCoffee.execute();
+        final result = await stream.first;
 
         result.fold(
           (failure) => fail('Expected right, got left: $failure'),
@@ -49,7 +51,8 @@ void main() {
       test('should return CoffeeNotFoundFailure on error', () async {
         mockedCoffeeRepository.mockGetFavouriteCoffeesError();
 
-        final result = await loadFavouriteCoffee.execute();
+        final stream = loadFavouriteCoffee.execute();
+        final result = await stream.first;
 
         expect(result.isLeft(), isTrue);
         result.fold(
