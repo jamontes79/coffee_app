@@ -4,8 +4,8 @@ import 'package:coffee_app/coffee/domain/model/coffee.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class CoffeeCard extends StatelessWidget {
-  const CoffeeCard({
+class CoffeeCardWidget extends StatelessWidget {
+  const CoffeeCardWidget({
     required this.isFavourite,
     required this.coffee,
     super.key,
