@@ -86,45 +86,6 @@ void main() {
     );
 
     testWidgets(
-      'should call refresh favourite coffees when favourite coffee '
-      'list is updated',
-      (tester) async {
-        mockedFavouriteCoffeesBloc
-          ..mockState(
-            const fav_coffee_bloc.FavouriteCoffeeState(
-              status: fav_coffee_bloc.FavouriteCoffeeStatus.loaded,
-              favouriteCoffees: [],
-            ),
-          )
-          ..mockListen([
-            const fav_coffee_bloc.FavouriteCoffeeState(
-              status: fav_coffee_bloc.FavouriteCoffeeStatus.loaded,
-              favouriteCoffees: [],
-            ),
-            fav_coffee_bloc.FavouriteCoffeeState(
-              status: fav_coffee_bloc.FavouriteCoffeeStatus.loaded,
-              favouriteCoffees: favouriteCoffees,
-            ),
-          ]);
-
-        await mockNetworkImages(
-          () async => tester.pumpApp(
-            _TesterWidget(
-              mockedBloc,
-              mockedFavouriteCoffeesBloc,
-              coffee,
-              favouriteCoffees,
-            ),
-          ),
-        );
-
-        verify(
-          () => mockedBloc.add(const RefreshFavouriteCoffeeEvent()),
-        ).called(1);
-      },
-    );
-
-    testWidgets(
       'should call load coffee when reload button is tapped',
       (tester) async {
         await mockNetworkImages(

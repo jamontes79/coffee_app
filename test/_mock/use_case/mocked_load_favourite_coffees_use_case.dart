@@ -7,10 +7,12 @@ import 'package:mocktail/mocktail.dart';
 class MockedLoadFavouriteCoffeesUseCase extends Mock
     implements LoadFavoriteCoffeesUseCase {
   void mockExecute(List<Coffee> expected) {
-    when(execute).thenAnswer((_) async => right(expected));
+    when(execute).thenAnswer((_) => Stream.value(right(expected)));
   }
 
   void mockLoadCoffeesError() {
-    when(execute).thenAnswer((_) async => left(CoffeeNotFoundFailure()));
+    when(
+      execute,
+    ).thenAnswer((_) => Stream.value(left(CoffeeNotFoundFailure())));
   }
 }

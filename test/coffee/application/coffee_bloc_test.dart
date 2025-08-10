@@ -72,6 +72,16 @@ void main() {
           const CoffeeState(
             status: CoffeeStatus.loaded,
             coffee: Coffee(url: 'https://example.com/coffee1.jpg'),
+            favouriteCoffees: [],
+          ),
+          const CoffeeState(
+            status: CoffeeStatus.loadingFavourites,
+            coffee: Coffee(url: 'https://example.com/coffee1.jpg'),
+            favouriteCoffees: [],
+          ),
+          const CoffeeState(
+            status: CoffeeStatus.loaded,
+            coffee: Coffee(url: 'https://example.com/coffee1.jpg'),
             favouriteCoffees: [
               Coffee(url: 'https://example.com/coffee1.jpg'),
               Coffee(url: 'https://example.com/coffee2.jpg'),
@@ -103,7 +113,7 @@ void main() {
         },
         expect: () => [
           const CoffeeState(
-            status: CoffeeStatus.loading,
+            status: CoffeeStatus.loadingFavourites,
             coffee: Coffee(url: 'https://example.com/coffee1.jpg'),
             favouriteCoffees: [],
           ),
@@ -137,7 +147,7 @@ void main() {
         },
         expect: () => [
           const CoffeeState(
-            status: CoffeeStatus.loading,
+            status: CoffeeStatus.loadingFavourites,
             coffee: Coffee(url: 'https://example.com/coffee1.jpg'),
             favouriteCoffees: [],
           ),
