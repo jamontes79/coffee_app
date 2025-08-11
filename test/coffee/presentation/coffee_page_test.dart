@@ -23,6 +23,8 @@ void main() {
   late MockedFavouriteCoffeeBloc mockedFavouriteCoffeeBloc;
   late MockedThemeBloc mockedThemeBloc;
 
+  const coffee = Coffee(url: 'https://example.com/coffee.jpg');
+
   setUp(() {
     mockGoRouter = MockGoRouter();
     mockedCoffeeBloc = MockedCoffeeBloc();
@@ -41,14 +43,7 @@ void main() {
       testWidgets(
         'should display a popup menu with "Favourite Coffees" option',
         (tester) async {
-          mockedCoffeeBloc.mockState(
-            const CoffeeState(
-              status: CoffeeStatus.loaded,
-              coffee: Coffee(
-                url: 'https://example.com/coffee.jpg',
-              ),
-            ),
-          );
+          mockedCoffeeBloc.mockState(const CoffeeLoadedState(coffee));
           await tester.pumpApp(
             _TesterWidget(
               mockedCoffeeBloc,
@@ -71,14 +66,7 @@ void main() {
       testWidgets(
         'should navigate to "Favourite Coffees" page when selected',
         (tester) async {
-          mockedCoffeeBloc.mockState(
-            const CoffeeState(
-              status: CoffeeStatus.loaded,
-              coffee: Coffee(
-                url: 'https://example.com/coffee.jpg',
-              ),
-            ),
-          );
+          mockedCoffeeBloc.mockState(const CoffeeLoadedState(coffee));
           await tester.pumpApp(
             MockGoRouterProvider(
               goRouter: mockGoRouter,
@@ -105,14 +93,7 @@ void main() {
       testWidgets(
         'should call ToggleThemeEvent when "Switch Theme Mode" selected',
         (tester) async {
-          mockedCoffeeBloc.mockState(
-            const CoffeeState(
-              status: CoffeeStatus.loaded,
-              coffee: Coffee(
-                url: 'https://example.com/coffee.jpg',
-              ),
-            ),
-          );
+          mockedCoffeeBloc.mockState(const CoffeeLoadedState(coffee));
           await tester.pumpApp(
             MockGoRouterProvider(
               goRouter: mockGoRouter,
@@ -140,14 +121,9 @@ void main() {
     });
     group('Loading', () {
       testWidgets(
-        'should render CircularProgressIndicator when bloc.status is loading',
+        'should render CircularProgressIndicator when bloc state is loading',
         (tester) async {
-          mockedCoffeeBloc.mockState(
-            CoffeeState(
-              status: CoffeeStatus.loading,
-              coffee: Coffee.empty(),
-            ),
-          );
+          mockedCoffeeBloc.mockState(const CoffeeLoadingState());
           await tester.pumpApp(
             _TesterWidget(
               mockedCoffeeBloc,
@@ -163,14 +139,9 @@ void main() {
       );
 
       testWidgets(
-        'should render CircularProgressIndicator when bloc.status is initial',
+        'should render CircularProgressIndicator when bloc state is initial',
         (tester) async {
-          mockedCoffeeBloc.mockState(
-            CoffeeState(
-              status: CoffeeStatus.initial,
-              coffee: Coffee.empty(),
-            ),
-          );
+          mockedCoffeeBloc.mockState(const CoffeeInitialState());
           await tester.pumpApp(
             _TesterWidget(
               mockedCoffeeBloc,
@@ -188,14 +159,9 @@ void main() {
 
     group('Error', () {
       testWidgets(
-        'should render CoffeeErrorWidget when bloc.status is error',
+        'should render CoffeeErrorWidget when bloc state is error',
         (tester) async {
-          mockedCoffeeBloc.mockState(
-            CoffeeState(
-              status: CoffeeStatus.error,
-              coffee: Coffee.empty(),
-            ),
-          );
+          mockedCoffeeBloc.mockState(const CoffeeErrorState());
           await tester.pumpApp(
             _TesterWidget(
               mockedCoffeeBloc,
@@ -213,16 +179,9 @@ void main() {
 
     group('Loaded', () {
       testWidgets(
-        'should render CoffeeIndividualWidget when bloc.status is loaded',
+        'should render CoffeeIndividualWidget when bloc state is loaded',
         (tester) async {
-          mockedCoffeeBloc.mockState(
-            const CoffeeState(
-              status: CoffeeStatus.loaded,
-              coffee: Coffee(
-                url: 'https://example.com/coffee.jpg',
-              ),
-            ),
-          );
+          mockedCoffeeBloc.mockState(const CoffeeLoadedState(coffee));
           await tester.pumpApp(
             _TesterWidget(
               mockedCoffeeBloc,

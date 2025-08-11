@@ -1,5 +1,4 @@
 import 'package:coffee_app/coffee/application/single/coffee_bloc.dart';
-import 'package:coffee_app/coffee/domain/model/coffee.dart';
 import 'package:coffee_app/coffee/presentation/widgets/coffee_error_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,12 +15,6 @@ void main() {
     testWidgets(
       'should render error message and retry action',
       (tester) async {
-        mockedCoffeeBloc.mockState(
-          CoffeeState(
-            status: CoffeeStatus.error,
-            coffee: Coffee.empty(),
-          ),
-        );
         await tester.pumpApp(const CoffeeErrorWidget());
 
         expect(
@@ -36,12 +29,6 @@ void main() {
     testWidgets(
       'should call CoffeeLoadEvent when retry button is pressed',
       (tester) async {
-        mockedCoffeeBloc.mockState(
-          CoffeeState(
-            status: CoffeeStatus.error,
-            coffee: Coffee.empty(),
-          ),
-        );
         await tester.pumpApp(
           BlocProvider<CoffeeBloc>.value(
             value: mockedCoffeeBloc,

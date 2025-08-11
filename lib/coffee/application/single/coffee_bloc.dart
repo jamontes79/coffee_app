@@ -13,7 +13,7 @@ part 'coffee_state.dart';
 /// It handles loading coffee data and refreshing the list of favorite coffees.
 @injectable
 class CoffeeBloc extends Bloc<CoffeeEvent, CoffeeState> {
-  CoffeeBloc(this._loadCoffeeUseCase) : super(CoffeeState.initial()) {
+  CoffeeBloc(this._loadCoffeeUseCase) : super(const CoffeeInitialState()) {
     on<LoadCoffeeEvent>(_onLoadCoffeeEvent);
   }
 
@@ -23,23 +23,13 @@ class CoffeeBloc extends Bloc<CoffeeEvent, CoffeeState> {
     LoadCoffeeEvent event,
     Emitter<CoffeeState> emit,
   ) async {
-    emit(state.copyWith(status: CoffeeStatus.loading));
+    emit(const CoffeeLoadingState());
     final failureOrCoffee = await _loadCoffeeUseCase.execute();
 
     failureOrCoffee.fold(
-      (failure) => emit(
-        state.copyWith(
-          status: CoffeeStatus.error,
-          coffee: Coffee.empty(),
-        ),
-      ),
+      (failure) => emit(const CoffeeErrorState()),
       (coffee) {
-        emit(
-          state.copyWith(
-            status: CoffeeStatus.loaded,
-            coffee: coffee,
-          ),
-        );
+        emit(CoffeeLoadedState(coffee));
       },
     );
   }
