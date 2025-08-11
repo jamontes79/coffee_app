@@ -46,13 +46,16 @@ class CoffeePage extends StatelessWidget {
               ),
             ],
           ),
-          body: switch (state.status) {
-            CoffeeStatus.loading || CoffeeStatus.initial => const Center(
+          body: switch (state) {
+            CoffeeInitialState() => const Center(
               child: CircularProgressIndicator(),
             ),
-            CoffeeStatus.error => const CoffeeErrorWidget(),
-            CoffeeStatus.loaded => CoffeeIndividualWidget(
-              coffee: state.coffee,
+            CoffeeLoadingState() => const Center(
+              child: CircularProgressIndicator(),
+            ),
+            CoffeeErrorState() => const CoffeeErrorWidget(),
+            CoffeeLoadedState(coffee: final coffee) => CoffeeIndividualWidget(
+              coffee: coffee,
             ),
           },
         );

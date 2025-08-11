@@ -1,41 +1,35 @@
 part of 'coffee_bloc.dart';
 
-enum CoffeeStatus {
-  initial,
-  loading,
-  loaded,
-  error,
+sealed class CoffeeState extends Equatable {
+  const CoffeeState();
 }
 
-final class CoffeeState extends Equatable {
-  const CoffeeState({
-    required this.status,
-    required this.coffee,
-  });
+class CoffeeInitialState extends CoffeeState {
+  const CoffeeInitialState();
 
-  factory CoffeeState.initial() {
-    return CoffeeState(
-      status: CoffeeStatus.initial,
-      coffee: Coffee.empty(),
-    );
-  }
+  @override
+  List<Object?> get props => [];
+}
 
-  final CoffeeStatus status;
+class CoffeeLoadingState extends CoffeeState {
+  const CoffeeLoadingState();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class CoffeeLoadedState extends CoffeeState {
+  const CoffeeLoadedState(this.coffee);
+
   final Coffee coffee;
 
   @override
-  List<Object?> get props => [
-    status,
-    coffee,
-  ];
+  List<Object?> get props => [coffee];
+}
 
-  CoffeeState copyWith({
-    required CoffeeStatus status,
-    Coffee? coffee,
-  }) {
-    return CoffeeState(
-      status: status,
-      coffee: coffee ?? this.coffee,
-    );
-  }
+class CoffeeErrorState extends CoffeeState {
+  const CoffeeErrorState();
+
+  @override
+  List<Object?> get props => [];
 }

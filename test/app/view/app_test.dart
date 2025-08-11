@@ -19,7 +19,8 @@ void main() {
   late MockedStorage mockedStorage;
 
   setUp(() {
-    mockedCoffeeBloc = MockedCoffeeBloc()..mockState(CoffeeState.initial());
+    mockedCoffeeBloc = MockedCoffeeBloc()
+      ..mockState(const CoffeeInitialState());
     mockedFavouriteCoffeeBloc = MockedFavouriteCoffeeBloc()
       ..mockState(
         const FavouriteCoffeeState(

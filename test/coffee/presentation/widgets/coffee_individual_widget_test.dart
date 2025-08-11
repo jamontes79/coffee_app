@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:coffee_app/coffee/application/favourite/favourite_coffee_bloc.dart'
-    as fav_coffee_bloc;
+import 'package:coffee_app/coffee/application/favourite/favourite_coffee_bloc.dart';
 import 'package:coffee_app/coffee/application/single/coffee_bloc.dart';
 import 'package:coffee_app/coffee/domain/model/coffee.dart';
 import 'package:coffee_app/coffee/presentation/widgets/coffee_individual_widget.dart';
@@ -19,18 +18,14 @@ void main() {
   final favouriteCoffees = [coffee];
   final mockedFavouriteCoffeesBloc = MockedFavouriteCoffeeBloc()
     ..mockState(
-      fav_coffee_bloc.FavouriteCoffeeState(
-        status: fav_coffee_bloc.FavouriteCoffeeStatus.loaded,
+      FavouriteCoffeeState(
+        status: FavouriteCoffeeStatus.loaded,
         favouriteCoffees: favouriteCoffees,
       ),
     );
   final mockedBloc = MockedCoffeeBloc()
-    ..mockState(
-      const CoffeeState(
-        status: CoffeeStatus.loaded,
-        coffee: coffee,
-      ),
-    );
+    ..mockState(const CoffeeLoadedState(coffee));
+
   group(CoffeeIndividualWidget, () {
     testWidgets(
       'should render coffee card when coffee is not empty',
@@ -76,7 +71,7 @@ void main() {
 
         verify(
           () => mockedFavouriteCoffeesBloc.add(
-            const fav_coffee_bloc.ToggleFavouriteCoffeeEvent(coffee),
+            const ToggleFavouriteCoffeeEvent(coffee),
           ),
         ).called(1);
       },
@@ -116,10 +111,10 @@ class _TesterWidget extends StatelessWidget {
   );
   final Coffee coffee;
   final CoffeeBloc coffeeBloc;
-  final fav_coffee_bloc.FavouriteCoffeeBloc favouriteCoffeeBloc;
+  final FavouriteCoffeeBloc favouriteCoffeeBloc;
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<fav_coffee_bloc.FavouriteCoffeeBloc>.value(
+    return BlocProvider<FavouriteCoffeeBloc>.value(
       value: favouriteCoffeeBloc,
       child: BlocProvider<CoffeeBloc>.value(
         value: coffeeBloc,
