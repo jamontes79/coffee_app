@@ -11,6 +11,12 @@ class LoadFavouriteCoffees implements LoadFavoriteCoffeesUseCase {
 
   final CoffeeRepository _coffeeRepository;
 
+  /// Executes the use case to load favorite coffees.
+  /// Returns a [Stream] that emits either a [CoffeeFailure] or a list of
+  /// [Coffee] objects.
+  /// If the favorite coffees are successfully fetched,
+  /// it emits [right(coffees)].
+  /// If an error occurs, it emits [left(LoadFavouritesFailure())].
   @override
   Stream<Either<CoffeeFailure, List<Coffee>>> execute() async* {
     try {

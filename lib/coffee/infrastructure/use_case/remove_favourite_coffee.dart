@@ -11,6 +11,11 @@ class RemoveFavouriteCoffee implements RemoveFavouriteCoffeeUseCase {
 
   final CoffeeRepository _coffeeRepository;
 
+  /// Executes the use case to remove a coffee from the favourites list.
+  /// Returns a [Future] that completes with either
+  /// a [CoffeeFailure] or a [Unit].
+  /// If the coffee is successfully removed, it returns [right(unit)].
+  /// If an error occurs, it returns [left(RemoveFavouriteCoffeeFailure())].
   @override
   Future<Either<CoffeeFailure, Unit>> execute(Coffee coffee) async {
     try {

@@ -11,6 +11,11 @@ class LoadCoffee implements LoadCoffeeUseCase {
 
   final CoffeeRepository _coffeeRepository;
 
+  /// Executes the use case to load coffee data.
+  /// Returns a [Future] that completes with either
+  /// a [CoffeeFailure] or a [Coffee].
+  /// If the coffee data is successfully fetched, it returns [right(coffee)].
+  /// If an error occurs, it returns [left(CoffeeNotFoundFailure())].
   @override
   Future<Either<CoffeeFailure, Coffee>> execute() async {
     try {

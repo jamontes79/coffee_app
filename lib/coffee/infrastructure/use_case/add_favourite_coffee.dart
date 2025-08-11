@@ -11,6 +11,11 @@ class AddFavouriteCoffee implements AddFavouriteCoffeeUseCase {
 
   final CoffeeRepository _coffeeRepository;
 
+  /// Executes the use case to add a coffee to the favourites list.
+  /// Returns a [Future] that completes with either
+  /// a [CoffeeFailure] or a [Unit].
+  /// If the coffee is successfully added, it returns [right(unit)].
+  /// If an error occurs, it returns [left(AddFavouriteCoffeeFailure())].
   @override
   Future<Either<CoffeeFailure, Unit>> execute(Coffee coffee) async {
     try {
