@@ -32,7 +32,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   injectable_generator: ^2.8.1
-  json_serializable: ^6.10.0
+  json_serializable: ^6.11.1
   mocktail: ^1.0.4
   mocktail_image_network: ^1.2.0
   remove_from_coverage: ^2.0.0
